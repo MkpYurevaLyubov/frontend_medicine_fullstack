@@ -1,13 +1,8 @@
 import React from "react";
 import { Alert, Snackbar } from "@mui/material";
+import { ISnackProps } from "../types/interfaces";
 
-interface SnackProps {
-  isOpen: boolean,
-  handleClose: () => void,
-  text: string
-}
-
-const Snack: React.FC<SnackProps> = ({isOpen, handleClose, text}) => {
+const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text}) => {
   return (
     <Snackbar
       anchorOrigin={{

@@ -1,12 +1,9 @@
 import React from "react";
 import MedIcon from "../../icons/medkit.svg";
+import {IHeaderProps} from "../types/interfaces";
 import "./header.scss";
 
-interface HeaderProps {
-  title: string
-}
-
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC<IHeaderProps> = ({ title }) => {
   return (
     <div className="header">
       <img

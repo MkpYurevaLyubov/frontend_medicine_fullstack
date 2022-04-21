@@ -1,6 +1,11 @@
 import React from "react";
-import {TextField, ThemeProvider, createTheme} from '@mui/material';
+import {
+  TextField,
+  ThemeProvider,
+  createTheme
+} from '@mui/material';
 import { indigo } from '@mui/material/colors';
+import { IInputProps } from "../types/interfaces";
 
 const theme = createTheme({
   palette: {
@@ -10,23 +15,15 @@ const theme = createTheme({
   },
 });
 
-interface InputProps {
-  value: string,
-  onChange: any,
-  title: string,
-  type: string,
-  flag: boolean
-}
-
-const Input: React.FC<InputProps> = ({ value, onChange, title, type, flag }) => {
+const Input: React.FC<IInputProps> = ({ value, onChange, title, type, flag }) => {
   return (
     <ThemeProvider theme={theme}>
       <TextField
         value={value}
-        onChange={(e) => onChange(e)}
+        onChange={onChange}
         label={title}
         variant="standard"
-        color={flag ? "error" : "primary"}
+        color={flag ? "primary" : "error"}
         focused
         fullWidth
         autoComplete="off"

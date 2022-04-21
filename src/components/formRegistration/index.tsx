@@ -3,20 +3,9 @@ import Input from "../Input";
 import Buttons from "../Button";
 import Snack from "../Snack";
 import { isValidatePassword } from "../help/m";
-import { ISnack } from "../help/interface";
+import { ISnack, IUser } from "../types/interfaces";
 import axios from "axios";
 import "./formRegistrashion.scss";
-
-interface IUser {
-  login: string,
-  password: string,
-  password_2: string
-}
-
-interface IFlag {
-  login: boolean,
-  password: boolean,
-}
 
 const FormRegistration: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -24,51 +13,37 @@ const FormRegistration: React.FC = () => {
     password: '',
     password_2: ''
   });
-
-  const [flag, setFlag] = useState<IFlag>({
-    login: false,
-    password: false,
-  });
-
+  const [uniqueLogin, setUniqueLogin] = useState(true);
+  const [disabledBtn, setDisabledBtn] = useState<boolean>(true);
   const [snackOpen, setSnackOpen] = useState<ISnack>({
     isOpen: false,
     text: ''
   });
 
   const onChangeUser = (type: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    setFlag({...flag, [type]: false})
-    setUser({...user, [type]: e.target.value});
+    const person: {[index: string]:string} = {...user};
+    person[type] = e.target.value;
+
+    person.login.length >= 6 && isValidatePassword(person.password)
+      && person.password === person.password_2 ? setDisabledBtn(false) : setDisabledBtn(true);
+
+    if (!uniqueLogin) setUniqueLogin(true);
+    setUser({login: person.login, password: person.password, password_2: person.password_2});
   };
 
   const onClickBtn = () => {
-    if (user.login.length < 6) {
-      setSnackOpen({isOpen: true, text: "Проверьте корректность введения логина!"});
-      return setFlag({...flag, login: true});
-    }
-
-    if (!isValidatePassword(user.password) || !isValidatePassword(user.password_2)) {
-      setSnackOpen({isOpen: true, text: "Проверьте корректность введения паролей!"});
-      return setFlag({...flag, password: true});
-    }
-
-    if (user.password !== user.password_2) {
-      setSnackOpen({isOpen: true, text: "Пароли не совпадают!"});
-      return setFlag({...flag, password: true});
-    }
-
     axios.post("http://localhost:8000/api/createUser", user)
       .then((res) => {
         localStorage.setItem("token", JSON.stringify(res.data));
         setUser({login: '', password: '', password_2: ''});
       })
       .catch((err) => {
-        console.log('err', err);
         if (err.response.data.e.code === '23505') {
           setSnackOpen({
             isOpen: true,
             text: "Пользователь с таким логином уже существует! Пожалуйста, измените логин"
           });
-          return setFlag({...flag, login: true});
+          setUniqueLogin(false);
         }
       });
   }
@@ -82,7 +57,7 @@ const FormRegistration: React.FC = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeUser("login", e)}
           title="Логин"
           type="text"
-          flag={flag.login}
+          flag={(!user.login || !!user.login) && (user.login.length === 0 || user.login.length > 6) && uniqueLogin}
         />
         <span>Не меньше 6 символов</span>
         <Input
@@ -90,7 +65,7 @@ const FormRegistration: React.FC = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeUser("password", e)}
           title="Пароль"
           type="password"
-          flag={flag.password}
+          flag={(!user.password || !!user.password) && (!user.password || isValidatePassword(user.password))}
         />
         <span>Не меньше 6 символов и прописные лат.буквы</span>
         <Input
@@ -98,10 +73,14 @@ const FormRegistration: React.FC = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeUser("password_2", e)}
           title="Повторите пароль"
           type="password"
-          flag={flag.password}
+          flag={(!user.password_2 || !!user.password_2) && (!user.password_2 || user.password === user.password_2)}
         />
         <span>Не меньше 6 символов и прописные лат.буквы</span>
-        <Buttons text="Зарегистрироваться" onClick={onClickBtn} />
+        <Buttons
+          text="Зарегистрироваться"
+          onClick={onClickBtn}
+          disabled={disabledBtn}
+        />
       </div>
       <a href={""}>Авторизоваться</a>
       <Snack
