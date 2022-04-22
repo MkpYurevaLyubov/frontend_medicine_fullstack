@@ -1,0 +1,18 @@
+.registrPage {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background: #c5cae9;
+  height: 100%;
+  width: 100%;
+
+  .mainImg {
+    width: 40%;
+  }
+}
+
+@media (max-width: 770px) {
+  .mainImg {
+    display: none;
+  }
+}
