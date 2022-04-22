@@ -25,7 +25,7 @@ export interface ISnackProps {
 export interface IUser {
   login: string,
   password: string,
-  password_2: string
+  password_2?: string
 }
 
 export interface ISnack {

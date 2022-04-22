@@ -11,6 +11,12 @@
   }
 }
 
+@media (max-height: 600px) {
+  .authPage {
+    height: auto;
+  }
+}
+
 @media (max-width: 770px) {
   .mainImg {
     display: none;

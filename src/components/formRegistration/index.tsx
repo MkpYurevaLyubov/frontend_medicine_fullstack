@@ -58,7 +58,7 @@ const FormRegistration: React.FC = () => {
   }
 
   return (
-    <div className="main">
+    <div className="mainRegistr">
       <h1>Регистрация</h1>
       <div className="info">
         <Input
@@ -76,7 +76,7 @@ const FormRegistration: React.FC = () => {
         />
         <span>Не меньше 6 символов и прописные лат.буквы</span>
         <InputPassword
-          value={user.password_2}
+          value={user.password_2!}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeUser("password_2", e)}
           title="Повторите пароль"
           flag={(!user.password_2 || !!user.password_2) && (!user.password_2 || user.password === user.password_2)}
