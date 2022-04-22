@@ -1,12 +1,16 @@
-.main {
+$primary-color: #1a237e;
+
+.mainRegistr {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 25rem;
   height: 30rem;
   padding: 30px 50px;
-  color: #1a237e;
+  color: $primary-color;
   background: white;
+  border-radius: 10px;
+  margin-top: 80px;
 
   h1 {
     font-size: 3rem;
@@ -21,7 +25,7 @@
     span {
       align-self: flex-end;
       margin-bottom: 15px;
-      color: #1a237e;
+      color: $primary-color;
       font-size: 0.8rem;
     }
 
@@ -32,18 +36,18 @@
 
   p {
     align-self: flex-end;
-    color: #1a237e;
+    color: $primary-color;
     margin-top: 15px;
 
     a {
-      color: #1a237e;
+      color: $primary-color;
       text-decoration: underline;
     }
   }
 }
 
 @media (max-width: 850px) {
-  .main {
+  .mainRegistr {
     padding: 25px;
     height: auto;
 
@@ -60,13 +64,13 @@
 }
 
 @media (max-width: 350px) {
-  .main {
+  .mainRegistr {
     width: 18rem;
     height: auto;
     padding: 15px;
-  }
 
-  h1 {
-    font-size: 2rem;
+    h1 {
+      font-size: 2rem;
+    }
   }
 }
