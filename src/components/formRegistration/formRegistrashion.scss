@@ -25,16 +25,20 @@
       font-size: 0.8rem;
     }
 
-    button {
+    .btnRegistration {
       align-self: flex-end;
     }
   }
 
-  a {
+  p {
     align-self: flex-end;
     color: #1a237e;
-    text-decoration: none;
     margin-top: 15px;
+
+    a {
+      color: #1a237e;
+      text-decoration: underline;
+    }
   }
 }
 

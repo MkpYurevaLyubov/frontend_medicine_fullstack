@@ -15,7 +15,7 @@ const theme = createTheme({
   },
 });
 
-const Buttons: React.FC<IButtonsProps> = ({ text, onClick, disabled }) => {
+const Buttons: React.FC<IButtonsProps> = ({text, onClick, disabled}) => {
   return (
     <ThemeProvider theme={theme}>
       <Button

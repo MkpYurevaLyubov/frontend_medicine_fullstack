@@ -6,7 +6,6 @@ export interface IInputProps {
   value: string,
   onChange: any,
   title: string,
-  type: string,
   flag: boolean
 }
 
@@ -19,7 +18,8 @@ export interface IButtonsProps {
 export interface ISnackProps {
   isOpen: boolean,
   handleClose: () => void,
-  text: string
+  text: string,
+  type: string
 }
 
 export interface IUser {
@@ -30,5 +30,6 @@ export interface IUser {
 
 export interface ISnack {
   isOpen: boolean,
-  text: string
+  text: string,
+  type: string
 }

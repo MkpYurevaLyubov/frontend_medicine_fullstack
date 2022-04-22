@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Snackbar } from "@mui/material";
 import { ISnackProps } from "../types/interfaces";
 
-const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text}) => {
+const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text, type}) => {
   return (
     <Snackbar
       anchorOrigin={{
@@ -14,9 +14,9 @@ const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text}) => {
       autoHideDuration={2000}
     >
       <Alert
-        severity="error"
+        severity={type === "error" ? "error" : "success"}
         variant="filled"
-        sx={{ width: '350px' }}
+        sx={{width: '350px'}}
       >
         {text}
       </Alert>

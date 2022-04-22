@@ -15,7 +15,7 @@ const theme = createTheme({
   },
 });
 
-const Input: React.FC<IInputProps> = ({ value, onChange, title, type, flag }) => {
+const Input: React.FC<IInputProps> = ({value, onChange, title, flag}) => {
   return (
     <ThemeProvider theme={theme}>
       <TextField
@@ -27,7 +27,6 @@ const Input: React.FC<IInputProps> = ({ value, onChange, title, type, flag }) =>
         focused
         fullWidth
         autoComplete="off"
-        type={type}
       />
     </ThemeProvider>
   );
