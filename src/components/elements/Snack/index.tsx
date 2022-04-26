@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, Snackbar } from "@mui/material";
-import { ISnackProps } from "../types/interfaces";
+import { ISnackProps } from "../../../types/interfaces";
 
 const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text, type}) => {
   return (

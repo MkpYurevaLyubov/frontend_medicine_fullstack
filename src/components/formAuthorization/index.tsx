@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Input from "../Input";
-import InputPassword from "../InputPassword";
-import Buttons from "../Button";
-import Snack from "../Snack";
-import { IUser } from "../types/interfaces";
+import Input from "../elements/Input";
+import InputPassword from "../elements/InputPassword";
+import Buttons from "../elements/Button";
+import Snack from "../elements/Snack";
+import {ISnack, IUser} from "../../types/interfaces";
 import "./formAuthorization.scss";
 
 const FormAuthorization: React.FC = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<IUser>({
     login: '',
     password: ''
   });
   const [disabledBtn, setDisabledBtn] = useState<boolean>(true);
-  const [snackOpen, setSnackOpen] = useState({
+  const [snackOpen, setSnackOpen] = useState<ISnack>({
     isOpen: false,
     text: '',
     type: ''
@@ -31,19 +32,14 @@ const FormAuthorization: React.FC = () => {
     axios.post("http://localhost:8000/api/authUser", user)
       .then((res) => {
         localStorage.setItem("token", JSON.stringify(res.data));
-        setUser({login: '', password: '', password_2: ''});
-        setSnackOpen({
-          isOpen: true,
-          text: "Вы вошли в систему!",
-          type: "success"
-        });
+        return navigate("/main");
       })
-      .catch((err) => {
+      .catch(() => {
         setUser({login: '', password: '', password_2: ''});
         setDisabledBtn(true);
         setSnackOpen({
           isOpen: true,
-          text: "Пользователь не найден!",
+          text: "Логин или пароль не верный!",
           type: "error"
         });
       });

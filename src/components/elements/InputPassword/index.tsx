@@ -8,9 +8,9 @@ import {
   createTheme,
   ThemeProvider
 } from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material/";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {indigo} from "@mui/material/colors";
-import {IInputProps} from "../types/interfaces";
+import {IInputProps} from "../../../types/interfaces";
 
 const theme = createTheme({
   palette: {
@@ -37,7 +37,13 @@ const InputPassword: React.FC<IInputProps> = ({value, onChange, title, flag}) =>
         focused
         color={flag ? "primary" : "error"}
       >
-        <InputLabel>{title}</InputLabel>
+        <InputLabel
+          sx={{
+            fontSize: 20
+          }}
+        >
+          {title}
+        </InputLabel>
         <Input
           type={isShow ? 'text' : 'password'}
           value={value}

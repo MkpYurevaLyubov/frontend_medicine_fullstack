@@ -1,5 +1,8 @@
+import React from "react";
+
 export interface IHeaderProps {
-  title: string
+  title: string,
+  flag: boolean
 }
 
 export interface IInputProps {
@@ -22,6 +25,19 @@ export interface ISnackProps {
   type: string
 }
 
+export interface IInputDateProps {
+  title: string,
+  value: Date,
+  onChange: (e: any) => void
+}
+
+export interface ISelectedProps {
+  values: Array<IDoctors>,
+  value: string
+  onChange: (e: any) => void,
+  title: string
+}
+
 export interface IUser {
   login: string,
   password: string,
@@ -32,4 +48,16 @@ export interface ISnack {
   isOpen: boolean,
   text: string,
   type: string
+}
+
+export interface IDoctors {
+  id: number,
+  fullname: string
+}
+
+export interface IOrder {
+  patientsname: string,
+  dateorder: Date,
+  complaints: string,
+  doctorid: string
 }

@@ -4,8 +4,8 @@ import {
   ThemeProvider,
   createTheme
 } from '@mui/material';
-import { indigo } from '@mui/material/colors';
-import { IInputProps } from "../types/interfaces";
+import {indigo} from '@mui/material/colors';
+import {IInputProps} from "../../../types/interfaces";
 
 const theme = createTheme({
   palette: {
@@ -27,6 +27,9 @@ const Input: React.FC<IInputProps> = ({value, onChange, title, flag}) => {
         focused
         fullWidth
         autoComplete="off"
+        sx={{
+          label: {fontSize: 20}
+        }}
       />
     </ThemeProvider>
   );

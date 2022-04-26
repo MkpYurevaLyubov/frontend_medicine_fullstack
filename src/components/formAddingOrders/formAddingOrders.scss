@@ -1,0 +1,31 @@
+.mainAddOrder {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 125px;
+  margin-top: 80px;
+  background: #c5cae9;
+
+  .componentAddingOrders {
+    width: 18%;
+    margin: 0 10px;
+  }
+
+  button {
+    padding: 10px 25px;
+  }
+}
+
+@media (max-width: 650px) {
+  .mainAddOrder {
+    height: auto;
+    flex-wrap: wrap;
+    margin-top: 100px;
+
+    .componentAddingOrders {
+      width: 80%;
+      margin: 0 10px 20px;
+    }
+  }
+}
