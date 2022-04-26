@@ -5,7 +5,7 @@ import {
   ThemeProvider
 } from '@mui/material';
 import { indigo } from "@mui/material/colors";
-import { IButtonsProps } from "../types/interfaces";
+import { IButtonsProps } from "../../../types/interfaces";
 
 const theme = createTheme({
   palette: {

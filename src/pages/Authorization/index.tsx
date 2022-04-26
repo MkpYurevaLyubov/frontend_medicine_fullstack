@@ -7,7 +7,7 @@ import "./authorization.scss";
 const AuthorizationPage: React.FC = () => {
   return (
     <>
-      <Header title="Войти в систему" />
+      <Header title="Войти в систему" flag={false} />
       <div className="authPage">
         <img className="mainImg" src={HospitalIcon} alt="Icon Hospital" />
         <FormAuthorization />

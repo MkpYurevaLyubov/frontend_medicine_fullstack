@@ -1,15 +1,16 @@
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
-import Input from "../Input";
-import Buttons from "../Button";
-import Snack from "../Snack";
-import InputPassword from "../InputPassword";
-import { isValidatePassword } from "../help/m";
-import { ISnack, IUser } from "../types/interfaces";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Input from "../elements/Input";
+import Buttons from "../elements/Button";
+import Snack from "../elements/Snack";
+import InputPassword from "../elements/InputPassword";
+import { isValidatePassword } from "../../helpers/m";
+import { ISnack, IUser } from "../../types/interfaces";
 import "./formRegistrashion.scss";
 
 const FormRegistration: React.FC = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<IUser>({
     login: '',
     password: '',
@@ -38,12 +39,7 @@ const FormRegistration: React.FC = () => {
     axios.post("http://localhost:8000/api/createUser", user)
       .then((res) => {
         localStorage.setItem("token", JSON.stringify(res.data));
-        setUser({login: '', password: '', password_2: ''});
-        setSnackOpen({
-          isOpen: true,
-          text: "Пользователь успешно зарегистрирован!",
-          type: "success"
-        });
+        return navigate("/main");
       })
       .catch((err) => {
         if (err.response.data.e.code === '23505') {
