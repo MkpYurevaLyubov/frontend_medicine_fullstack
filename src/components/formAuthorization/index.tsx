@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import Input from "../elements/Input";
 import InputPassword from "../elements/InputPassword";
@@ -39,7 +39,7 @@ const FormAuthorization: React.FC = () => {
         setDisabledBtn(true);
         setSnackOpen({
           isOpen: true,
-          text: "Логин или пароль не верный!",
+          text: "Логин или пароль неверный!",
           type: "error"
         });
       });

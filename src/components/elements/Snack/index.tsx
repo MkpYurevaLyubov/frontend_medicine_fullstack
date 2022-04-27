@@ -1,6 +1,6 @@
 import React from "react";
-import { Alert, Snackbar } from "@mui/material";
-import { ISnackProps } from "../../../types/interfaces";
+import {Alert, Snackbar} from "@mui/material";
+import {ISnackProps} from "../../../types/interfaces";
 
 const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text, type}) => {
   return (
@@ -15,7 +15,6 @@ const Snack: React.FC<ISnackProps> = ({isOpen, handleClose, text, type}) => {
     >
       <Alert
         severity={type === "error" ? "error" : "success"}
-        variant="filled"
         sx={{width: '350px'}}
       >
         {text}
