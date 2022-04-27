@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface IHeaderProps {
   title: string,
   flag: boolean
@@ -32,10 +30,28 @@ export interface IInputDateProps {
 }
 
 export interface ISelectedProps {
-  values: Array<IDoctors>,
-  value: string
+  values: IDoctors[],
+  value: string,
   onChange: (e: any) => void,
   title: string
+}
+
+export interface IFormAddingOrdersProps {
+  allDoctors: IDoctors[],
+  updatePage: () => void
+}
+
+export interface ITableOrdersProps {
+  orders: IOrder[],
+  allDoctors: IDoctors[],
+  updatePage: () => void
+}
+
+export interface IResponsiveDialogProps {
+  isOpen: boolean,
+  handleClose: () => void,
+  text: string,
+  onClickYes: () => void
 }
 
 export interface IUser {
@@ -56,8 +72,14 @@ export interface IDoctors {
 }
 
 export interface IOrder {
+  id?: number,
   patientsname: string,
   dateorder: Date,
   complaints: string,
   doctorid: string
+}
+
+export interface IDeleteOrder {
+  id: number | null,
+  isOpen: boolean
 }

@@ -18,7 +18,6 @@ const theme = createTheme({
 
 const InputDate: React.FC<IInputDateProps> = ({value, title, onChange}) => {
   const handleChange = (newValue: Date | null) => {
-    console.log('date', newValue);
     onChange(newValue);
   };
   return (

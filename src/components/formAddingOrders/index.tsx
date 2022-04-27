@@ -1,22 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import Input from "../elements/Input";
 import Selected from "../elements/Selected";
 import InputDate from "../elements/InputDate";
 import Buttons from "../elements/Button";
-import {IDoctors, IOrder, ISnack} from "../../types/interfaces";
+import {
+  IFormAddingOrdersProps,
+  IOrder,
+  ISnack
+} from "../../types/interfaces";
 import "./formAddingOrders.scss";
 import Snack from "../elements/Snack";
 
-const FormAddingOrders: React.FC = () => {
-  const [allDoctors, setAllDoctors] = useState<IDoctors[]>([]);
+const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updatePage}) => {
   const [order, setOrder] = useState<IOrder>({
     patientsname: '',
     dateorder: new Date(),
     complaints: '',
     doctorid: ''
   });
-  const { patientsname, dateorder, complaints, doctorid } = order;
+  const {patientsname, dateorder, complaints, doctorid} = order;
   const [disabledBtn, setDisabledBtn] = useState<boolean>(true);
   const [snackOpen, setSnackOpen] = useState<ISnack>({
     isOpen: false,
@@ -24,19 +27,12 @@ const FormAddingOrders: React.FC = () => {
     type: ''
   });
 
-  useEffect(() => {
-    axios.get("http://localhost:8000/api/allDoctors")
-      .then((res) => {
-        setAllDoctors(res.data);
-      })
-  }, []);
-
   const onChangeInputs = (type: string, value: string | React.ChangeEvent<HTMLInputElement>) => {
-    const appointment: { [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date } = {...order};
+    const appointment: { [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date | number } = {...order};
     appointment[type] = value;
 
     appointment.patientsname && appointment.dateorder && appointment.complaints
-      && appointment.doctorid  ? setDisabledBtn(false) : setDisabledBtn(true);
+      && appointment.doctorid ? setDisabledBtn(false) : setDisabledBtn(true);
 
     setOrder({...order, [type]: value});
   }
@@ -63,6 +59,7 @@ const FormAddingOrders: React.FC = () => {
           text: "Прием успешно добавлен!",
           type: "success"
         });
+        updatePage();
       })
       .catch(() => {
         setSnackOpen({

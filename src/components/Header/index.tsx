@@ -1,7 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Buttons from "../elements/Button";
-import { IHeaderProps } from "../../types/interfaces";
+import {IHeaderProps} from "../../types/interfaces";
 import MedIcon from "../../icons/medkit.svg";
 import "./header.scss";
 

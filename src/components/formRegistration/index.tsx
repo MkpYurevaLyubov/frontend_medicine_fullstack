@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import Input from "../elements/Input";
 import Buttons from "../elements/Button";
 import Snack from "../elements/Snack";
 import InputPassword from "../elements/InputPassword";
-import { isValidatePassword } from "../../helpers/m";
-import { ISnack, IUser } from "../../types/interfaces";
+import {isValidatePassword} from "../../helpers/m";
+import {ISnack, IUser} from "../../types/interfaces";
 import "./formRegistrashion.scss";
 
 const FormRegistration: React.FC = () => {
