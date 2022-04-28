@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 import {styled} from '@mui/material/styles';
 import {
   Table,
@@ -14,8 +15,9 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ResponsiveDialog from "../elements/Dialog";
+import FormEditingOrder from "../formEditingOrder";
 import {IDeleteOrder, ITableOrdersProps} from "../../types/interfaces";
-import {convertDate, getDoctor} from "../../helpers/m";
+import {getDoctor} from "../../helpers/m";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,7 +27,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    padding: 0
+    padding: "0 5px"
   },
 }));
 
@@ -41,13 +43,33 @@ const StyledTableRow = styled(TableRow)(() => ({
 const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePage}) => {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState<IDeleteOrder>({id: null, isOpen: false});
+  const [openEditForm, setOpenEditForm] = useState({
+    values: {
+      patientsname: '',
+      dateorder: new Date(),
+      complaints: '',
+      doctorid: ''
+    },
+    isOpen: false
+  });
+  const [disabledBtnEdit, setDisabledBtnEdit] = useState<boolean>(false);
+
+  const onChangeInputs = (type: string, value: string | React.ChangeEvent<HTMLInputElement>) => {
+    const appointment: { [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date | number } = {...openEditForm.values};
+    appointment[type] = value;
+
+    appointment.patientsname && appointment.dateorder && appointment.complaints
+      && appointment.doctorid ? setDisabledBtnEdit(false) : setDisabledBtnEdit(true);
+
+    setOpenEditForm({...openEditForm, values: {...openEditForm.values, [type]: value}});
+  };
 
   const deleteOrder = (id: number) => {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (!token) return navigate("/authorization");
     const headers = {
-      'Content-Type': 'application/json',
-      'accesstoken': token
+      "Content-Type": "application/json",
+      "accesstoken": token
     };
     axios.delete(`http://localhost:8000/api/deleteOrder?id=${id}`, {
       headers: headers
@@ -58,8 +80,36 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
       })
   };
 
+  const updateOrder = () => {
+    const token = JSON.parse(localStorage.getItem('token')!);
+    if (!token) return navigate("/authorization");
+    const headers = {
+      "Content-Type": "application/json",
+      "accesstoken": token
+    };
+    axios.patch(`http://localhost:8000/api/updateOrder`, {
+        ...openEditForm.values,
+        dateorder: moment(openEditForm.values.dateorder).format(),
+      },
+      {
+        headers: headers
+      })
+      .then(() => {
+        setOpenEditForm({
+          values: {
+            patientsname: '',
+            dateorder: new Date(),
+            complaints: '',
+            doctorid: ''
+          },
+          isOpen: false
+        });
+        updatePage();
+      })
+  };
+
   return (
-    <TableContainer component={Paper} sx={{width: "80%", margin: "auto"}}>
+    <TableContainer component={Paper} sx={{width: "95%", margin: "auto"}}>
       <Table>
         <TableHead>
           <TableRow>
@@ -75,10 +125,15 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
             <StyledTableRow key={order.id}>
               <StyledTableCell align="center">{order.patientsname}</StyledTableCell>
               <StyledTableCell align="center">{getDoctor(allDoctors, Number(order.doctorid))}</StyledTableCell>
-              <StyledTableCell align="center">{convertDate(new Date(order.dateorder))}</StyledTableCell>
+              <StyledTableCell align="center">{moment(new Date(order.dateorder)).format("DD.MM.YYYY")}</StyledTableCell>
               <StyledTableCell align="center">{order.complaints}</StyledTableCell>
               <StyledTableCell align="center">
-                <IconButton>
+                <IconButton
+                  onClick={() => setOpenEditForm({
+                    values: {...order, dateorder: new Date(order.dateorder)},
+                    isOpen: true
+                  })}
+                >
                   {<EditIcon/>}
                 </IconButton>
                 <IconButton
@@ -96,6 +151,23 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
         handleClose={() => setOpenDialog({id: null, isOpen: false})}
         text="Вы действительно хотите удалить приём?"
         onClickYes={() => deleteOrder(openDialog.id!)}
+      />
+      <FormEditingOrder
+        allDoctors={allDoctors}
+        order={openEditForm.values}
+        onChange={onChangeInputs}
+        isOpen={openEditForm.isOpen}
+        handleClose={() => setOpenEditForm({
+          values: {
+            patientsname: '',
+            dateorder: new Date(),
+            complaints: '',
+            doctorid: ''
+          },
+          isOpen: false
+        })}
+        onClickYes={updateOrder}
+        disabled={disabledBtnEdit}
       />
     </TableContainer>
   );

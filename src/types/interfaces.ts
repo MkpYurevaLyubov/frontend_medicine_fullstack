@@ -54,6 +54,16 @@ export interface IResponsiveDialogProps {
   onClickYes: () => void
 }
 
+export interface IFormEditingOrderProps {
+  allDoctors: IDoctors[],
+  order: IOrder,
+  onChange: (type: string, value: string | React.ChangeEvent<HTMLInputElement>) => void,
+  isOpen: boolean,
+  handleClose: () => void,
+  onClickYes: () => void,
+  disabled: boolean
+}
+
 export interface IUser {
   login: string,
   password: string,

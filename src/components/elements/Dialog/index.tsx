@@ -14,8 +14,6 @@ const ResponsiveDialog: React.FC<IResponsiveDialogProps> = ({isOpen, handleClose
       <Dialog
         open={isOpen}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText>
