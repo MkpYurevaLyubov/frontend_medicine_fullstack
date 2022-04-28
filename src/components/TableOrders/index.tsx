@@ -77,7 +77,7 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
       .then(() => {
         setOpenDialog({id: null, isOpen: false});
         updatePage();
-      })
+      });
   };
 
   const updateOrder = () => {
@@ -109,7 +109,10 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
   };
 
   return (
-    <TableContainer component={Paper} sx={{width: "95%", margin: "auto"}}>
+    <TableContainer
+      component={Paper}
+      sx={{width: "95%", margin: "auto"}}
+    >
       <Table>
         <TableHead>
           <TableRow>

@@ -30,6 +30,8 @@ const FormEditingOrder: React.FC<IFormEditingOrderProps> = ({
       <Dialog
         open={isOpen}
         onClose={handleClose}
+        fullWidth
+        maxWidth="xs"
       >
         <DialogTitle
           sx={{
@@ -46,8 +48,7 @@ const FormEditingOrder: React.FC<IFormEditingOrderProps> = ({
             flexDirection: "column",
             justifyContent: "space-between",
             height: "15rem",
-            width: "25rem",
-            padding: "25px 50px"
+            padding: "25px 35px"
           }}
         >
           <Input
