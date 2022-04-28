@@ -5,9 +5,11 @@ import Header from "../../components/Header";
 import FormAddingOrders from "../../components/formAddingOrders";
 import TableOrders from "../../components/TableOrders";
 import Snack from "../../components/elements/Snack";
+import FormFilterOrders from "../../components/formFilterOrders";
 import NotOrders from "../../icons/diagnosis.svg";
-import {IDoctors, IOrder, ISnack} from "../../types/interfaces";
+import {IDoctors, IFilter, IOrder, ISnack} from "../../types/interfaces";
 import "./main.scss";
+import moment from "moment";
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,11 +21,26 @@ const MainPage: React.FC = () => {
     text: '',
     type: ''
   });
+  const [filter, setFilter] = useState<IFilter>({
+    method: "",
+    type: "asc",
+    from: "",
+    to: ""
+  });
+  const [ftrWithDate, setFtrWithDate] = useState<boolean>(false);
 
   useEffect(() => {
     fetchDoctors();
     fetchOrders();
   }, [updatePage]);
+
+  useEffect(() => {
+    if (!filter.method) setFtrWithDate(false);
+  }, [filter.method]);
+
+  useEffect(() => {
+    if (filter.method && filter.type) fetchOrders();
+  }, [filter])
 
   const fetchDoctors = () => {
     axios.get("http://localhost:8000/api/allDoctors")
@@ -46,12 +63,24 @@ const MainPage: React.FC = () => {
       'Content-Type': 'application/json',
       'accesstoken': token
     }
+
+    const params = {
+      ...filter,
+      from: moment(filter.from).format(),
+      to: moment(filter.to).format()
+    };
+
     axios.get("http://localhost:8000/api/allOrders", {
+      params,
       headers: headers
     })
       .then((res) => {
         setOrders(res.data);
       });
+  };
+
+  const onChangeFilter = (type: string, value: string) => {
+    setFilter({...filter, [type]: value});
   };
 
   return (
@@ -63,11 +92,20 @@ const MainPage: React.FC = () => {
       />
       {orders && orders.length > 0 ?
         (
-          <TableOrders
-            orders={orders}
-            allDoctors={allDoctors}
-            updatePage={() => setUpdatePage(!updatePage)}
-          />
+          <>
+            <FormFilterOrders
+              filter={filter}
+              onChange={onChangeFilter}
+              ftrWithDate={ftrWithDate}
+              changeBtnFltDate={() => setFtrWithDate(!ftrWithDate)}
+              onClickSaveDate={fetchOrders}
+            />
+            <TableOrders
+              orders={orders}
+              allDoctors={allDoctors}
+              updatePage={() => setUpdatePage(!updatePage)}
+            />
+          </>
         ) : (
           <div className="notOrdersPage">
             <h1>Приемов нет</h1>

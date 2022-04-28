@@ -43,7 +43,7 @@ const Selected: React.FC<ISelectedProps> = ({values, value, title, onChange}) =>
           onChange={handleChange}
           label={title}
         >
-          {values.map((el) => (
+          {values.map((el: any) => (
             <MenuItem key={`el-${el.id}`} value={el.id}>
               {el.fullname}
             </MenuItem>

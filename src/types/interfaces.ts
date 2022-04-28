@@ -30,7 +30,7 @@ export interface IInputDateProps {
 }
 
 export interface ISelectedProps {
-  values: IDoctors[],
+  values: any,
   value: string,
   onChange: (e: any) => void,
   title: string
@@ -64,6 +64,14 @@ export interface IFormEditingOrderProps {
   disabled: boolean
 }
 
+export interface IFormFilterOrdersProps {
+  filter: IFilter,
+  onChange: (type: string, value: string) => void,
+  ftrWithDate: boolean,
+  changeBtnFltDate: () => void,
+  onClickSaveDate: () => void
+}
+
 export interface IUser {
   login: string,
   password: string,
@@ -92,4 +100,11 @@ export interface IOrder {
 export interface IDeleteOrder {
   id: number | null,
   isOpen: boolean
+}
+
+export interface IFilter {
+  method: string,
+  type: string,
+  from: string,
+  to: string
 }

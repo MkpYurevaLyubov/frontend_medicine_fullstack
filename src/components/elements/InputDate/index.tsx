@@ -32,6 +32,7 @@ const InputDate: React.FC<IInputDateProps> = ({value, title, onChange}) => {
           renderInput={(params: any) =>
             <TextField
               {...params}
+              error={false}
               variant="standard"
               color="primary"
               focused
