@@ -4,13 +4,14 @@ import axios from "axios";
 import Header from "../../components/Header";
 import FormAddingOrders from "../../components/formAddingOrders";
 import TableOrders from "../../components/TableOrders";
-import {IDoctors, ISnack} from "../../types/interfaces";
-import "./main.scss";
 import Snack from "../../components/elements/Snack";
+import NotOrders from "../../icons/diagnosis.svg";
+import {IDoctors, IOrder, ISnack} from "../../types/interfaces";
+import "./main.scss";
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
   const [allDoctors, setAllDoctors] = useState<IDoctors[]>([]);
   const [updatePage, setUpdatePage] = useState<boolean>(true);
   const [snackOpen, setSnackOpen] = useState<ISnack>({
@@ -32,7 +33,7 @@ const MainPage: React.FC = () => {
       .catch(() => {
         setSnackOpen({
           isOpen: true,
-          text: "Сервер не работает!",
+          text: "Сервер не отвечает",
           type: "error"
         });
       });
@@ -60,11 +61,20 @@ const MainPage: React.FC = () => {
         allDoctors={allDoctors}
         updatePage={() => setUpdatePage(!updatePage)}
       />
-      <TableOrders
-        orders={orders}
-        allDoctors={allDoctors}
-        updatePage={() => setUpdatePage(!updatePage)}
-      />
+      {orders && orders.length > 0 ?
+        (
+          <TableOrders
+            orders={orders}
+            allDoctors={allDoctors}
+            updatePage={() => setUpdatePage(!updatePage)}
+          />
+        ) : (
+          <div className="notOrdersPage">
+            <h1>Приемов нет</h1>
+            <img src={NotOrders} alt="Not Orders" />
+          </div>
+        )
+      }
       <Snack
         isOpen={snackOpen.isOpen}
         handleClose={() => setSnackOpen({...snackOpen, isOpen: false})}
