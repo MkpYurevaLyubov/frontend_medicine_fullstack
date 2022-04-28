@@ -5,18 +5,6 @@ export const isValidatePassword = (password: string): boolean => {
   return re.test(password);
 };
 
-const padTo2Digits = (num: string) => {
-  return num.toString().padStart(2, '0');
-};
-
-export const convertDate = (date: any) => {
-  return [
-    padTo2Digits(date.getDate()),
-    padTo2Digits(date.getMonth() + 1),
-    date.getFullYear(),
-  ].join('.');
-};
-
 export const getDoctor = (doctors: IDoctors[], id: number) => {
   const doctor = doctors.find((el) => el.id === id);
   return doctor!.fullname;

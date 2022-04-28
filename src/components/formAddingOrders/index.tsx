@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
+import moment from "moment";
 import Input from "../elements/Input";
 import Selected from "../elements/Selected";
 import InputDate from "../elements/InputDate";
@@ -35,15 +36,19 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
       && appointment.doctorid ? setDisabledBtn(false) : setDisabledBtn(true);
 
     setOrder({...order, [type]: value});
-  }
+  };
 
   const onClickBtn = () => {
     const token = JSON.parse(localStorage.getItem('token')!);
     const headers = {
       'Content-Type': 'application/json',
       'accesstoken': token
-    }
-    axios.post("http://localhost:8000/api/createOrder", order, {
+    };
+    axios.post("http://localhost:8000/api/createOrder", {
+      ...order,
+      dateorder: moment(order.dateorder).format(),
+    },
+    {
       headers: headers
     })
       .then(() => {
@@ -68,7 +73,7 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
           type: "error"
         });
       });
-  }
+  };
 
   return (
     <div className="mainAddOrder">
