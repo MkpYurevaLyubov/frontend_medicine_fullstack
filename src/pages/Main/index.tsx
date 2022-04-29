@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 import Header from "../../components/Header";
 import FormAddingOrders from "../../components/formAddingOrders";
 import TableOrders from "../../components/TableOrders";
 import Snack from "../../components/elements/Snack";
 import FormFilterOrders from "../../components/formFilterOrders";
 import NotOrders from "../../icons/diagnosis.svg";
-import {IDoctors, IFilter, IOrder, ISnack} from "../../types/interfaces";
+import {IDoctors, IFilter, IOrder, ISnack, ISort} from "../../types/interfaces";
 import "./main.scss";
-import moment from "moment";
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,12 +21,8 @@ const MainPage: React.FC = () => {
     text: '',
     type: ''
   });
-  const [filter, setFilter] = useState<IFilter>({
-    method: "",
-    type: "ASC",
-    from: "",
-    to: ""
-  });
+  const [filter, setFilter] = useState<IFilter>({method: "", type: "ASC"});
+  const [sort, setSort] = useState<ISort>({from: "", to: ""});
   const [ftrWithDate, setFtrWithDate] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,22 +31,22 @@ const MainPage: React.FC = () => {
   }, [updatePage]);
 
   useEffect(() => {
-    if (!filter.method) setFtrWithDate(false);
-  }, [filter.method]);
-
-  useEffect(() => {
-    if (filter.method && filter.type) fetchOrders();
-  }, [filter])
+    if (!filter.method || !ftrWithDate) {
+      setFtrWithDate(false);
+      setSort({from: "", to: ""});
+    }
+    if (filter.method && filter.type && !ftrWithDate) fetchOrders();
+  }, [filter, ftrWithDate])
 
   const fetchDoctors = () => {
     axios.get("http://localhost:8000/api/allDoctors")
       .then((res) => {
         setAllDoctors(res.data);
       })
-      .catch(() => {
-        setSnackOpen({
+      .catch((err) => {
+        if (!err.response) setSnackOpen({
           isOpen: true,
-          text: "Сервер не отвечает",
+          text: "Нет подключения к серверу",
           type: "error"
         });
       });
@@ -64,11 +60,11 @@ const MainPage: React.FC = () => {
       'accesstoken': token
     }
 
-    const params = {
+    const params = ftrWithDate ? {
       ...filter,
-      from: moment(filter.from).format(),
-      to: moment(filter.to).format()
-    };
+      from: `${moment(sort.from).format("YYYY-MM-DD")} 00:00:00`,
+      to: `${moment(sort.to).format("YYYY-MM-DD")} 23:59:59`
+    } : {...filter};
 
     axios.get("http://localhost:8000/api/allOrders", {
       params,
@@ -80,6 +76,7 @@ const MainPage: React.FC = () => {
   };
 
   const onChangeFilter = (type: string, value: string) => {
+    if (type === "from" || type === "to") return setSort({...sort, [type]: value});
     setFilter({...filter, [type]: value});
   };
 
@@ -90,26 +87,25 @@ const MainPage: React.FC = () => {
         allDoctors={allDoctors}
         updatePage={() => setUpdatePage(!updatePage)}
       />
+      <FormFilterOrders
+        filter={filter}
+        sort={sort}
+        onChange={onChangeFilter}
+        ftrWithDate={ftrWithDate}
+        changeBtnFltDate={() => setFtrWithDate(!ftrWithDate)}
+        onClickSaveDate={fetchOrders}
+      />
       {orders && orders.length > 0 ?
         (
-          <>
-            <FormFilterOrders
-              filter={filter}
-              onChange={onChangeFilter}
-              ftrWithDate={ftrWithDate}
-              changeBtnFltDate={() => setFtrWithDate(!ftrWithDate)}
-              onClickSaveDate={fetchOrders}
-            />
-            <TableOrders
-              orders={orders}
-              allDoctors={allDoctors}
-              updatePage={() => setUpdatePage(!updatePage)}
-            />
-          </>
+          <TableOrders
+            orders={orders}
+            allDoctors={allDoctors}
+            updatePage={() => setUpdatePage(!updatePage)}
+          />
         ) : (
           <div className="notOrdersPage">
             <h1>Приемов нет</h1>
-            <img src={NotOrders} alt="Not Orders" />
+            <img src={NotOrders} alt="Not Orders"/>
           </div>
         )
       }

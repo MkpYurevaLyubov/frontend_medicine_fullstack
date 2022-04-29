@@ -1,10 +1,10 @@
 import React from "react";
 import Selected from "../elements/Selected";
+import InputDate from "../elements/InputDate";
+import Buttons from "../elements/Button";
 import AddFilterDate from "../../icons/plus.svg";
 import {IFormFilterOrdersProps} from "../../types/interfaces";
 import "./formFilterOrders.scss";
-import InputDate from "../elements/InputDate";
-import Buttons from "../elements/Button";
 
 const methods = [
   {
@@ -16,7 +16,7 @@ const methods = [
     fullname: "По имени"
   },
   {
-    id: "doctorid",
+    id: "fullname",
     fullname: "По врачу"
   },
   {
@@ -36,7 +36,9 @@ const type = [
   }
 ];
 
-const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({filter, onChange, ftrWithDate, changeBtnFltDate, onClickSaveDate}) => {
+const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({
+  filter, sort, onChange, ftrWithDate, changeBtnFltDate, onClickSaveDate
+}) => {
   return (
     <>
       <div className="formFilterOrdersOneLine">
@@ -74,15 +76,17 @@ const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({filter, onChange, f
                 <div className="inputsFilterDate">
                   <InputDate
                     title="C:"
-                    value={new Date(filter.from)}
+                    value={new Date(sort.from)}
                     onChange={(e) => onChange("from", e)}
+                    disablePast={false}
                   />
                 </div>
                 <div className="inputsFilterDate">
                   <InputDate
                     title="По:"
-                    value={new Date(filter.to)}
+                    value={new Date(sort.to)}
                     onChange={(e) => onChange("to", e)}
+                    disablePast={false}
                   />
                 </div>
                 <div className="btnFilterDate">

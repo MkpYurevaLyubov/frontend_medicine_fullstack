@@ -16,7 +16,7 @@ const theme = createTheme({
   },
 });
 
-const InputDate: React.FC<IInputDateProps> = ({value, title, onChange}) => {
+const InputDate: React.FC<IInputDateProps> = ({value, title, onChange, disablePast}) => {
   const handleChange = (newValue: Date | null) => {
     onChange(newValue);
   };
@@ -24,7 +24,7 @@ const InputDate: React.FC<IInputDateProps> = ({value, title, onChange}) => {
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
         <DesktopDatePicker
-          disablePast
+          disablePast={disablePast}
           label={title}
           inputFormat="dd/MM/yyyy"
           value={value}
