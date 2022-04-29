@@ -5,7 +5,8 @@
   width: 100%;
   height: 125px;
   margin-top: 80px;
-  background: #c5cae9;
+  background: #e8eaf6;
+  box-shadow: 0 -10px 15px 5px #1a237e;
 
   .componentAddingOrders {
     width: 18%;
@@ -21,11 +22,10 @@
   .mainAddOrder {
     height: auto;
     flex-wrap: wrap;
-    margin-top: 100px;
 
     .componentAddingOrders {
       width: 80%;
-      margin: 0 10px 20px;
+      margin: 15px;
     }
 
     button {

@@ -1,0 +1,42 @@
+.formFilterOrdersOneLine {
+  display: flex;
+  justify-content: flex-start;
+  margin: 25px 0 10px;
+  width: 95%;
+
+  .selected {
+    width: 20%;
+    margin-right: 18px;
+  }
+}
+
+.formFilterOrdersTwoLine {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0 25px;
+  width: 95%;
+
+  .addFilterDate {
+    display: flex;
+    color: #1a237e;
+    cursor: pointer;
+
+    img {
+      width: 25px;
+    }
+  }
+
+  .inputsFilterDate {
+    width: 20%;
+    margin-right: 18px;
+  }
+
+  .btnFilterDate {
+    display: flex;
+    margin-right: 18px;
+  }
+
+  .display {
+    display: none;
+  }
+}
