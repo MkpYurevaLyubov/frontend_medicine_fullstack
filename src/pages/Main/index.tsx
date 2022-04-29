@@ -23,7 +23,7 @@ const MainPage: React.FC = () => {
   });
   const [filter, setFilter] = useState<IFilter>({
     method: "",
-    type: "asc",
+    type: "ASC",
     from: "",
     to: ""
   });

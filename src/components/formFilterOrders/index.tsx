@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Selected from "../elements/Selected";
 import AddFilterDate from "../../icons/plus.svg";
 import {IFormFilterOrdersProps} from "../../types/interfaces";
@@ -27,11 +27,11 @@ const methods = [
 
 const type = [
   {
-    id: "asc",
+    id: "ASC",
     fullname: "По возрастанию"
   },
   {
-    id: "desc",
+    id: "DESC",
     fullname: "По убыванию"
   }
 ];

@@ -30,7 +30,7 @@ export interface IInputDateProps {
 }
 
 export interface ISelectedProps {
-  values: any,
+  values: IDoctors[] | IArrFilters[],
   value: string,
   onChange: (e: any) => void,
   title: string
@@ -107,4 +107,9 @@ export interface IFilter {
   type: string,
   from: string,
   to: string
+}
+
+export interface IArrFilters {
+  id: string,
+  fullname: string
 }
