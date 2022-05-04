@@ -40,3 +40,31 @@
     display: none;
   }
 }
+
+@media (max-width: 650px) {
+  .formFilterOrdersOneLine {
+    flex-direction: column;
+
+    .selected {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+
+  .formFilterOrdersTwoLine {
+    flex-direction: column;
+
+    .inputsFilterDate {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .btnFilterDate {
+      display: contents;
+
+      button {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

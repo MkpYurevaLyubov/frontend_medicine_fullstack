@@ -16,8 +16,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ResponsiveDialog from "../elements/Dialog";
 import FormEditingOrder from "../formEditingOrder";
-import {IDeleteOrder, ITableOrdersProps} from "../../types/interfaces";
-import {getDoctor} from "../../helpers/m";
+import {IDeleteOrder, ISnack, ITableOrdersProps} from "../../types/interfaces";
+import {isValidateDate} from "../../helpers/m";
+import Snack from "../elements/Snack";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,12 +54,17 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
     isOpen: false
   });
   const [disabledBtnEdit, setDisabledBtnEdit] = useState<boolean>(false);
+  const [snackOpen, setSnackOpen] = useState<ISnack>({
+    isOpen: false,
+    text: '',
+    type: ''
+  });
 
   const onChangeInputs = (type: string, value: string | React.ChangeEvent<HTMLInputElement>) => {
     const appointment: { [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date | number } = {...openEditForm.values};
     appointment[type] = value;
 
-    appointment.patientsname && appointment.dateorder && appointment.complaints
+    appointment.patientsname && isValidateDate(appointment.dateorder) && appointment.complaints
       && appointment.doctorid ? setDisabledBtnEdit(false) : setDisabledBtnEdit(true);
 
     setOpenEditForm({...openEditForm, values: {...openEditForm.values, [type]: value}});
@@ -77,6 +83,13 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
       .then(() => {
         setOpenDialog({id: null, isOpen: false});
         updatePage();
+      })
+      .catch((err) => {
+        if (!err.response) setSnackOpen({
+          isOpen: true,
+          text: "Нет подключения к серверу!",
+          type: "error"
+        });
       });
   };
 
@@ -106,6 +119,13 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
         });
         updatePage();
       })
+      .catch((err) => {
+        if (!err.response) setSnackOpen({
+          isOpen: true,
+          text: "Нет подключения к серверу!",
+          type: "error"
+        });
+      });
   };
 
   return (
@@ -127,8 +147,8 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
           {orders.map((order) => (
             <StyledTableRow key={order.id}>
               <StyledTableCell align="center">{order.patientsname}</StyledTableCell>
-              <StyledTableCell align="center">{getDoctor(allDoctors, Number(order.doctorid))}</StyledTableCell>
-              <StyledTableCell align="center">{moment(new Date(order.dateorder)).format("DD.MM.YYYY")}</StyledTableCell>
+              <StyledTableCell align="center">{order.fullname}</StyledTableCell>
+              <StyledTableCell align="center">{moment(order.dateorder).format("DD.MM.YYYY")}</StyledTableCell>
               <StyledTableCell align="center">{order.complaints}</StyledTableCell>
               <StyledTableCell align="center">
                 <IconButton
@@ -171,6 +191,12 @@ const TableOrders: React.FC<ITableOrdersProps> = ({orders, allDoctors, updatePag
         })}
         onClickYes={updateOrder}
         disabled={disabledBtnEdit}
+      />
+      <Snack
+        isOpen={snackOpen.isOpen}
+        handleClose={() => setSnackOpen({...snackOpen, isOpen: false})}
+        text={snackOpen.text}
+        type={snackOpen.type}
       />
     </TableContainer>
   );

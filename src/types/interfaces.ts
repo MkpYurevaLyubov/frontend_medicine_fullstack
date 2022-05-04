@@ -26,7 +26,8 @@ export interface ISnackProps {
 export interface IInputDateProps {
   title: string,
   value: Date,
-  onChange: (e: any) => void
+  onChange: (e: any) => void,
+  disablePast: boolean
 }
 
 export interface ISelectedProps {
@@ -66,6 +67,7 @@ export interface IFormEditingOrderProps {
 
 export interface IFormFilterOrdersProps {
   filter: IFilter,
+  sort: ISort,
   onChange: (type: string, value: string) => void,
   ftrWithDate: boolean,
   changeBtnFltDate: () => void,
@@ -94,7 +96,8 @@ export interface IOrder {
   patientsname: string,
   dateorder: Date,
   complaints: string,
-  doctorid: string
+  doctorid: string,
+  fullname?: string
 }
 
 export interface IDeleteOrder {
@@ -104,7 +107,10 @@ export interface IDeleteOrder {
 
 export interface IFilter {
   method: string,
-  type: string,
+  type: string
+}
+
+export interface ISort {
   from: string,
   to: string
 }

@@ -1,19 +1,22 @@
 import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import Input from "../elements/Input";
 import Selected from "../elements/Selected";
 import InputDate from "../elements/InputDate";
 import Buttons from "../elements/Button";
+import Snack from "../elements/Snack";
 import {
   IFormAddingOrdersProps,
   IOrder,
   ISnack
 } from "../../types/interfaces";
+import {isValidateDate} from "../../helpers/m";
 import "./formAddingOrders.scss";
-import Snack from "../elements/Snack";
 
 const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updatePage}) => {
+  const navigate = useNavigate();
   const [order, setOrder] = useState<IOrder>({
     patientsname: '',
     dateorder: new Date(),
@@ -32,7 +35,7 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
     const appointment: { [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date | number } = {...order};
     appointment[type] = value;
 
-    appointment.patientsname && appointment.dateorder && appointment.complaints
+    appointment.patientsname && isValidateDate(appointment.dateorder) && appointment.complaints
       && appointment.doctorid ? setDisabledBtn(false) : setDisabledBtn(true);
 
     setOrder({...order, [type]: value});
@@ -40,17 +43,18 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
 
   const onClickBtn = () => {
     const token = JSON.parse(localStorage.getItem('token')!);
+    if (!token) navigate("/authorization");
     const headers = {
       'Content-Type': 'application/json',
       'accesstoken': token
     };
     axios.post("http://localhost:8000/api/createOrder", {
-      ...order,
-      dateorder: moment(order.dateorder).format(),
-    },
-    {
-      headers: headers
-    })
+        ...order,
+        dateorder: moment(order.dateorder).format(),
+      },
+      {
+        headers: headers
+      })
       .then(() => {
         setOrder({
           patientsname: '',
@@ -66,10 +70,10 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
         });
         updatePage();
       })
-      .catch(() => {
-        setSnackOpen({
+      .catch((err) => {
+        if (!err.response) setSnackOpen({
           isOpen: true,
-          text: "Что-то сломалось!",
+          text: "Нет подключения к серверу!",
           type: "error"
         });
       });
@@ -98,6 +102,7 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({allDoctors, updateP
           title="Дата:"
           value={dateorder}
           onChange={(e) => onChangeInputs("dateorder", e)}
+          disablePast
         />
       </div>
       <div className="componentAddingOrders">

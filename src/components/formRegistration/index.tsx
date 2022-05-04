@@ -42,6 +42,11 @@ const FormRegistration: React.FC = () => {
         return navigate("/main");
       })
       .catch((err) => {
+        if (!err.response) return setSnackOpen({
+          isOpen: true,
+          text: "Нет подключения к серверу",
+          type: "error"
+        });
         if (err.response.data.e.code === '23505') {
           setSnackOpen({
             isOpen: true,

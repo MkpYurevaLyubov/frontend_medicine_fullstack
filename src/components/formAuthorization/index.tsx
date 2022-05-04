@@ -34,7 +34,12 @@ const FormAuthorization: React.FC = () => {
         localStorage.setItem("token", JSON.stringify(res.data));
         return navigate("/main");
       })
-      .catch(() => {
+      .catch((err) => {
+        if (!err.response) return setSnackOpen({
+          isOpen: true,
+          text: "Нет подключения к серверу",
+          type: "error"
+        });
         setUser({login: '', password: '', password_2: ''});
         setDisabledBtn(true);
         setSnackOpen({

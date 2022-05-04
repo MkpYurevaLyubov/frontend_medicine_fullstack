@@ -24,7 +24,7 @@ const theme = createTheme({
 
 const FormEditingOrder: React.FC<IFormEditingOrderProps> = ({
   allDoctors, order, onChange, isOpen, handleClose, onClickYes, disabled
-}) => {
+                                                            }) => {
   return (
     <ThemeProvider theme={theme}>
       <Dialog
@@ -67,6 +67,7 @@ const FormEditingOrder: React.FC<IFormEditingOrderProps> = ({
             title="Дата:"
             value={order.dateorder!}
             onChange={(e) => onChange("dateorder", e)}
+            disablePast
           />
           <Input
             value={order.complaints!}
