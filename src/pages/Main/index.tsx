@@ -1,15 +1,21 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
-import moment from "moment";
-import Header from "../../components/Header";
-import FormAddingOrders from "../../components/formAddingOrders";
-import TableOrders from "../../components/TableOrders";
-import Snack from "../../components/elements/Snack";
-import FormFilterOrders from "../../components/formFilterOrders";
-import NotOrders from "../../icons/diagnosis.svg";
-import {IDoctors, IFilter, IOrder, ISnack, ISort} from "../../types/interfaces";
-import "./main.scss";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import moment from 'moment';
+import Header from '../../components/Header';
+import FormAddingOrders from '../../components/formAddingOrders';
+import TableOrders from '../../components/TableOrders';
+import Snack from '../../components/elements/Snack';
+import FormFilterOrders from '../../components/formFilterOrders';
+import NotOrders from '../../icons/diagnosis.svg';
+import {
+  IDoctors,
+  IFilter,
+  IOrder,
+  ISnack,
+  ISort,
+} from '../../types/interfaces';
+import './main.scss';
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,10 +25,10 @@ const MainPage: React.FC = () => {
   const [snackOpen, setSnackOpen] = useState<ISnack>({
     isOpen: false,
     text: '',
-    type: ''
+    type: '',
   });
-  const [filter, setFilter] = useState<IFilter>({method: "", type: "ASC"});
-  const [sort, setSort] = useState<ISort>({from: "", to: ""});
+  const [filter, setFilter] = useState<IFilter>({ method: '', type: 'ASC' });
+  const [sort, setSort] = useState<ISort>({ from: '', to: '' });
   const [ftrWithDate, setFtrWithDate] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,56 +39,62 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     if (!filter.method || !ftrWithDate) {
       setFtrWithDate(false);
-      setSort({from: "", to: ""});
+      setSort({ from: '', to: '' });
     }
     if (filter.method && filter.type && !ftrWithDate) fetchOrders();
-  }, [filter, ftrWithDate])
+  }, [filter, ftrWithDate]);
 
   const fetchDoctors = () => {
-    axios.get("http://localhost:8000/api/allDoctors")
+    axios
+      .get('http://localhost:8000/api/allDoctors')
       .then((res) => {
         setAllDoctors(res.data);
       })
       .catch((err) => {
-        if (!err.response) setSnackOpen({
-          isOpen: true,
-          text: "Нет подключения к серверу",
-          type: "error"
-        });
+        if (!err.response)
+          setSnackOpen({
+            isOpen: true,
+            text: 'Нет подключения к серверу',
+            type: 'error',
+          });
       });
   };
 
   const fetchOrders = () => {
     const token = JSON.parse(localStorage.getItem('token')!);
-    if (!token) return navigate("/authorization");
+    if (!token) return navigate('/authorization');
     const headers = {
       'Content-Type': 'application/json',
-      'accesstoken': token
-    }
+      accesstoken: token,
+    };
 
-    const params = ftrWithDate ? {
-      ...filter,
-      from: `${moment(sort.from).format("YYYY-MM-DD")} 00:00:00`,
-      to: `${moment(sort.to).format("YYYY-MM-DD")} 23:59:59`
-    } : {...filter};
+    const params = ftrWithDate
+      ? {
+          ...filter,
+          from: `${moment(sort.from).format('YYYY-MM-DD')}T00:00:00.000Z`,
+          to: `${moment(sort.to).format('YYYY-MM-DD')}T23:59:59.000Z`,
+        }
+      : { ...filter };
 
-    axios.get("http://localhost:8000/api/allOrders", {
-      params,
-      headers: headers
-    })
+    axios
+      .get('http://localhost:8000/api/allOrders', {
+        params,
+        headers: headers,
+      })
       .then((res) => {
         setOrders(res.data);
       });
   };
 
   const onChangeFilter = (type: string, value: string) => {
-    if (type === "from" || type === "to") return setSort({...sort, [type]: value});
-    setFilter({...filter, [type]: value});
+    if (type === 'from' || type === 'to')
+      return setSort({ ...sort, [type]: value });
+    setFilter({ ...filter, [type]: value });
   };
 
   return (
     <div className="mainPage">
-      <Header title="Приемы" flag={true}/>
+      <Header title="Приемы" flag={true} />
       <FormAddingOrders
         allDoctors={allDoctors}
         updatePage={() => setUpdatePage(!updatePage)}
@@ -95,23 +107,21 @@ const MainPage: React.FC = () => {
         changeBtnFltDate={() => setFtrWithDate(!ftrWithDate)}
         onClickSaveDate={fetchOrders}
       />
-      {orders && orders.length > 0 ?
-        (
-          <TableOrders
-            orders={orders}
-            allDoctors={allDoctors}
-            updatePage={() => setUpdatePage(!updatePage)}
-          />
-        ) : (
-          <div className="notOrdersPage">
-            <h1>Приемов нет</h1>
-            <img src={NotOrders} alt="Not Orders"/>
-          </div>
-        )
-      }
+      {orders && orders.length > 0 ? (
+        <TableOrders
+          orders={orders}
+          allDoctors={allDoctors}
+          updatePage={() => setUpdatePage(!updatePage)}
+        />
+      ) : (
+        <div className="notOrdersPage">
+          <h1>Приемов нет</h1>
+          <img src={NotOrders} alt="Not Orders" />
+        </div>
+      )}
       <Snack
         isOpen={snackOpen.isOpen}
-        handleClose={() => setSnackOpen({...snackOpen, isOpen: false})}
+        handleClose={() => setSnackOpen({ ...snackOpen, isOpen: false })}
         text={snackOpen.text}
         type={snackOpen.type}
       />
