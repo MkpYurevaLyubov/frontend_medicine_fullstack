@@ -1,43 +1,48 @@
-import React from "react";
-import Selected from "../elements/Selected";
-import InputDate from "../elements/InputDate";
-import Buttons from "../elements/Button";
-import AddFilterDate from "../../icons/plus.svg";
-import {IFormFilterOrdersProps} from "../../types/interfaces";
-import "./formFilterOrders.scss";
+import React from 'react';
+import Selected from '../elements/Selected';
+import InputDate from '../elements/InputDate';
+import Buttons from '../elements/Button';
+import AddFilterDate from '../../icons/plus.svg';
+import { IFormFilterOrdersProps } from '../../types/interfaces';
+import './formFilterOrders.scss';
 
 const methods = [
   {
-    id: "",
-    fullname: "None"
+    Id: '',
+    fullName: 'None',
   },
   {
-    id: "patientsname",
-    fullname: "По имени"
+    Id: 'patientsName',
+    fullName: 'По имени',
   },
   {
-    id: "fullname",
-    fullname: "По врачу"
+    Id: 'fullName',
+    fullName: 'По врачу',
   },
   {
-    id: "dateorder",
-    fullname: "По дате"
-  }
+    Id: 'dateOrder',
+    fullName: 'По дате',
+  },
 ];
 
 const type = [
   {
-    id: "ASC",
-    fullname: "По возрастанию"
+    Id: 'ASC',
+    fullName: 'По возрастанию',
   },
   {
-    id: "DESC",
-    fullname: "По убыванию"
-  }
+    Id: 'DESC',
+    fullName: 'По убыванию',
+  },
 ];
 
 const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({
-  filter, sort, onChange, ftrWithDate, changeBtnFltDate, onClickSaveDate
+  filter,
+  sort,
+  onChange,
+  ftrWithDate,
+  changeBtnFltDate,
+  onClickSaveDate,
 }) => {
   return (
     <>
@@ -46,38 +51,38 @@ const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({
           <Selected
             values={methods}
             value={filter.method}
-            onChange={(e) => onChange("method", e)}
+            onChange={(e) => onChange('method', e)}
             title="Сортировать по:"
           />
         </div>
         <div className="selected">
-          {filter && filter.method &&
+          {filter && filter.method && (
             <Selected
               values={type}
               value={filter.type}
-              onChange={(e) => onChange("type", e)}
+              onChange={(e) => onChange('type', e)}
               title="Направление:"
             />
-          }
+          )}
         </div>
       </div>
       <div className="formFilterOrdersTwoLine">
-        {filter && filter.method && filter.type &&
+        {filter && filter.method && filter.type && (
           <>
             <div
-              className={`addFilterDate ${ftrWithDate && "display"}`}
+              className={`addFilterDate ${ftrWithDate && 'display'}`}
               onClick={changeBtnFltDate}
             >
               <p>Добавить фильтр по дате:</p>
-              <img src={AddFilterDate} alt="Add Filter Date"/>
+              <img src={AddFilterDate} alt="Add Filter Date" />
             </div>
-            {ftrWithDate &&
+            {ftrWithDate && (
               <>
                 <div className="inputsFilterDate">
                   <InputDate
                     title="C:"
                     value={new Date(sort.from)}
-                    onChange={(e) => onChange("from", e)}
+                    onChange={(e) => onChange('from', e)}
                     disablePast={false}
                   />
                 </div>
@@ -85,7 +90,7 @@ const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({
                   <InputDate
                     title="По:"
                     value={new Date(sort.to)}
-                    onChange={(e) => onChange("to", e)}
+                    onChange={(e) => onChange('to', e)}
                     disablePast={false}
                   />
                 </div>
@@ -104,9 +109,9 @@ const FormFilterOrders: React.FC<IFormFilterOrdersProps> = ({
                   />
                 </div>
               </>
-            }
+            )}
           </>
-        }
+        )}
       </div>
     </>
   );

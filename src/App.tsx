@@ -1,9 +1,9 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import RegistrationPage from "./pages/Registrashion";
-import AuthorizationPage from "./pages/Authorization";
-import MainPage from "./pages/Main";
-import "./app.scss";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import RegistrationPage from './pages/Registrashion';
+import AuthorizationPage from './pages/Authorization';
+import MainPage from './pages/Main';
+import './app.scss';
 
 const App: React.FC = () => {
   return (

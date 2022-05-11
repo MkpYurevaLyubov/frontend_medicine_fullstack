@@ -4,5 +4,8 @@ export const isValidatePassword = (password: string): boolean => {
 };
 
 export const isValidateDate = (date: any) => {
-  return new Date(date).getTime() / 8.64e+7 >= Math.floor(new Date().getTime() / 8.64e+7);
+  return (
+    Math.ceil(new Date(date).getTime() / 8.64e7) >=
+    Math.floor(new Date().getTime() / 8.64e7)
+  );
 };

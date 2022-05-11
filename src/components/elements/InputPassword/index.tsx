@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   IconButton,
   Input,
@@ -6,26 +6,33 @@ import {
   InputAdornment,
   FormControl,
   createTheme,
-  ThemeProvider
-} from "@mui/material";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {indigo} from "@mui/material/colors";
-import {IInputProps} from "../../../types/interfaces";
+  ThemeProvider,
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { indigo } from '@mui/material/colors';
+import { IInputProps } from '../../../types/interfaces';
 
 const theme = createTheme({
   palette: {
     primary: {
       main: indigo[800],
-    }
+    },
   },
 });
 
-const InputPassword: React.FC<IInputProps> = ({value, onChange, title, flag}) => {
+const InputPassword: React.FC<IInputProps> = ({
+  value,
+  onChange,
+  title,
+  flag,
+}) => {
   const [isShow, setIsShow] = React.useState<boolean>(false);
 
   const handleClickShowPassword = () => setIsShow(!isShow);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
   };
 
@@ -35,11 +42,11 @@ const InputPassword: React.FC<IInputProps> = ({value, onChange, title, flag}) =>
         variant="standard"
         fullWidth
         focused
-        color={flag ? "primary" : "error"}
+        color={flag ? 'primary' : 'error'}
       >
         <InputLabel
           sx={{
-            fontSize: 20
+            fontSize: 20,
           }}
         >
           {title}
@@ -54,9 +61,9 @@ const InputPassword: React.FC<IInputProps> = ({value, onChange, title, flag}) =>
                 aria-label="toggle password visibility"
                 onClick={handleClickShowPassword}
                 onMouseDown={handleMouseDownPassword}
-                color={flag ? "primary" : "error"}
+                color={flag ? 'primary' : 'error'}
               >
-                {isShow ? <VisibilityOff/> : <Visibility/>}
+                {isShow ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           }
