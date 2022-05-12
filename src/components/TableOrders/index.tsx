@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import moment from 'moment';
 import { styled } from '@mui/material/styles';
 import {
@@ -17,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ResponsiveDialog from '../elements/Dialog';
 import FormEditingOrder from '../formEditingOrder';
+import axiosApiInstance from '../../helpers/request';
 import {
   IDeleteOrder,
   ISnack,
@@ -97,19 +97,17 @@ const TableOrders: React.FC<ITableOrdersProps> = ({
   const deleteOrder = (id: string) => {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (!token) return navigate('/authorization');
-    const headers = {
-      'Content-Type': 'application/json',
-      accesstoken: token,
-    };
-    axios
-      .delete(`http://localhost:8000/api/deleteOrder?id=${id}`, {
-        headers: headers,
-      })
+    axiosApiInstance
+      .delete(`http://localhost:8000/api/deleteOrder?id=${id}`)
       .then(() => {
         setOpenDialog({ id: null, isOpen: false });
         updatePage();
       })
       .catch((err) => {
+        if (err?.response?.status === 403) {
+          localStorage.removeItem('token');
+          return navigate('/authorization');
+        }
         if (!err.response)
           setSnackOpen({
             isOpen: true,
@@ -122,21 +120,11 @@ const TableOrders: React.FC<ITableOrdersProps> = ({
   const updateOrder = () => {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (!token) return navigate('/authorization');
-    const headers = {
-      'Content-Type': 'application/json',
-      accesstoken: token,
-    };
-    axios
-      .patch(
-        `http://localhost:8000/api/updateOrder`,
-        {
-          ...openEditForm.values,
-          dateOrder: moment(openEditForm.values.dateOrder).format(),
-        },
-        {
-          headers: headers,
-        },
-      )
+    axiosApiInstance
+      .patch(`http://localhost:8000/api/updateOrder`, {
+        ...openEditForm.values,
+        dateOrder: moment(openEditForm.values.dateOrder).format(),
+      })
       .then(() => {
         setOpenEditForm({
           values: {
@@ -150,6 +138,10 @@ const TableOrders: React.FC<ITableOrdersProps> = ({
         updatePage();
       })
       .catch((err) => {
+        if (err?.response?.status === 403) {
+          localStorage.removeItem('token');
+          return navigate('/authorization');
+        }
         if (!err.response)
           setSnackOpen({
             isOpen: true,

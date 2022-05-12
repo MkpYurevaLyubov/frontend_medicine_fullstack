@@ -8,6 +8,7 @@ import TableOrders from '../../components/TableOrders';
 import Snack from '../../components/elements/Snack';
 import FormFilterOrders from '../../components/formFilterOrders';
 import NotOrders from '../../icons/diagnosis.svg';
+import axiosApiInstance from '../../helpers/request';
 import {
   IDoctors,
   IFilter,
@@ -63,10 +64,6 @@ const MainPage: React.FC = () => {
   const fetchOrders = () => {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (!token) return navigate('/authorization');
-    const headers = {
-      'Content-Type': 'application/json',
-      accesstoken: token,
-    };
 
     const params = ftrWithDate
       ? {
@@ -76,13 +73,18 @@ const MainPage: React.FC = () => {
         }
       : { ...filter };
 
-    axios
+    axiosApiInstance
       .get('http://localhost:8000/api/allOrders', {
         params,
-        headers: headers,
       })
       .then((res) => {
         setOrders(res.data);
+      })
+      .catch((err) => {
+        if (err?.response?.status === 403) {
+          localStorage.removeItem('token');
+          return navigate('/authorization');
+        }
       });
   };
 
