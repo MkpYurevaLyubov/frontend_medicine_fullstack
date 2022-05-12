@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import moment from 'moment';
 import Input from '../elements/Input';
 import Selected from '../elements/Selected';
@@ -8,6 +7,7 @@ import InputDate from '../elements/InputDate';
 import Buttons from '../elements/Button';
 import Snack from '../elements/Snack';
 import { IFormAddingOrdersProps, IOrder, ISnack } from '../../types/interfaces';
+import axiosApiInstance from '../../helpers/request';
 import { isValidateDate } from '../../helpers/m';
 import './formAddingOrders.scss';
 
@@ -53,25 +53,15 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({
     setOrder({ ...order, [type]: value });
   };
 
-  const onClickBtn = () => {
+  const onClickBtn = async () => {
     const token = JSON.parse(localStorage.getItem('token')!);
     if (!token) navigate('/authorization');
-    const headers = {
-      'Content-Type': 'application/json',
-      accesstoken: token,
-    };
-    axios
-      .post(
-        'http://localhost:8000/api/createOrder',
-        {
-          ...order,
-          dateOrder: moment(order.dateOrder).format('YYYY-MM-DD'),
-        },
-        {
-          headers: headers,
-        },
-      )
-      .then(() => {
+    axiosApiInstance
+      .post('http://localhost:8000/api/createOrder', {
+        ...order,
+        dateOrder: moment(order.dateOrder).format('YYYY-MM-DD'),
+      })
+      .then((res) => {
         setOrder({
           patientsName: '',
           dateOrder: new Date(),
@@ -87,6 +77,10 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({
         updatePage();
       })
       .catch((err) => {
+        if (err?.response?.status === 403) {
+          localStorage.removeItem('token');
+          return navigate('/authorization');
+        }
         if (!err.response)
           setSnackOpen({
             isOpen: true,
