@@ -74,10 +74,14 @@ const TableOrders: React.FC<ITableOrdersProps> = ({
 
   const onChangeInputs = (
     type: string,
-    value: string | React.ChangeEvent<HTMLInputElement>,
+    value: string | React.ChangeEvent<HTMLInputElement> | Date | null,
   ) => {
     const appointment: {
-      [index: string]: string | React.ChangeEvent<HTMLInputElement> | Date;
+      [index: string]:
+        | string
+        | React.ChangeEvent<HTMLInputElement>
+        | Date
+        | null;
     } = { ...openEditForm.values };
     appointment[type] = value;
 

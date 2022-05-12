@@ -88,7 +88,7 @@ const MainPage: React.FC = () => {
       });
   };
 
-  const onChangeFilter = (type: string, value: string) => {
+  const onChangeFilter = (type: string, value: string | Date | null) => {
     if (type === 'from' || type === 'to')
       return setSort({ ...sort, [type]: value });
     setFilter({ ...filter, [type]: value });
