@@ -1,6 +1,6 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -22,7 +22,7 @@ const InputDate: React.FC<IInputDateProps> = ({
   onChange,
   disablePast,
 }) => {
-  const handleChange = (newValue: Date | null) => {
+  const handleChange = (newValue: string | Date | null) => {
     onChange(newValue);
   };
   return (
@@ -34,7 +34,7 @@ const InputDate: React.FC<IInputDateProps> = ({
           inputFormat="dd/MM/yyyy"
           value={value}
           onChange={handleChange}
-          renderInput={(params: any) => (
+          renderInput={(params: TextFieldProps) => (
             <TextField
               {...params}
               error={false}

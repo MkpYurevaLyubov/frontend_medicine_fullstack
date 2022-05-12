@@ -32,14 +32,15 @@ const FormAddingOrders: React.FC<IFormAddingOrdersProps> = ({
 
   const onChangeInputs = (
     type: string,
-    value: string | React.ChangeEvent<HTMLInputElement>,
+    value: string | React.ChangeEvent<HTMLInputElement> | Date | null,
   ) => {
     const appointment: {
       [index: string]:
         | string
         | React.ChangeEvent<HTMLInputElement>
         | Date
-        | object;
+        | object
+        | null;
     } = { ...order };
     appointment[type] = value;
 

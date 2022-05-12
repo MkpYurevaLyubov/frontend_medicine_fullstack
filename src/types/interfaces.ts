@@ -76,14 +76,14 @@ export interface ISnackProps {
 export interface IInputDateProps {
   title: string;
   value: Date;
-  onChange: (e: any) => void;
+  onChange: (e: Date | string | null) => void;
   disablePast: boolean;
 }
 
 export interface ISelectedProps {
   values: IDoctors[] | IArrFilters[];
   value: string;
-  onChange: (e: any) => void;
+  onChange: (e: string) => void;
   title: string;
 }
 
@@ -110,7 +110,7 @@ export interface IFormEditingOrderProps {
   order: IOrder;
   onChange: (
     type: string,
-    value: string | React.ChangeEvent<HTMLInputElement>,
+    value: string | React.ChangeEvent<HTMLInputElement> | Date | null,
   ) => void;
   isOpen: boolean;
   handleClose: () => void;
@@ -121,7 +121,7 @@ export interface IFormEditingOrderProps {
 export interface IFormFilterOrdersProps {
   filter: IFilter;
   sort: ISort;
-  onChange: (type: string, value: string) => void;
+  onChange: (type: string, value: string | Date | null) => void;
   ftrWithDate: boolean;
   changeBtnFltDate: () => void;
   onClickSaveDate: () => void;
